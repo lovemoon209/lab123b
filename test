@@ -1,0 +1,92 @@
+admin@MacBook-Air-admin-2 tems % cat
+ tets123b.cpp
+#define main dont_use_main
+#include "lab123b.cpp"
+#undef main
+
+#include <cstring>
+#include <gtest/gtest.h>
+
+TEST(GetProfileMarkTest, CorrectValues) {
+  Student s1 = {1, "A", 1, CS, 0, 0, {.programming = 90}};
+  Student s2 = {2, "B", 1, IT, 0, 0, {.numerical = 75}};
+  Student s3 = {3, "C", 1, MathEco, 0, 0, {.pedagogy = 88}};
+
+  EXPECT_EQ(getProfileMark(s1), 90);
+  EXPECT_EQ(getProfileMark(s2), 75);
+  EXPECT_EQ(getProfileMark(s3), 88);
+}
+
+TEST(CompareStudentsTest, ProfileSorting) {
+  Student a = {1, "AAA", 1, CS, 0, 0, {.programming = 70}};
+  Student b = {2, "BBB", 1, CS, 0, 0, {.programming = 90}};
+  EXPECT_TRUE(compareStudents(a, b));
+  EXPECT_FALSE(compareStudents(b, a));
+}
+
+TEST(CompareStudentsTest, CourseSorting) {
+  Student a = {1, "AAA", 1, CS, 0, 0, {.programming = 80}};
+  Student b = {2, "BBB", 2, CS, 0, 0, {.programming = 80}};
+  EXPECT_TRUE(compareStudents(a, b));
+}
+
+TEST(CompareStudentsTest, SurnameReverseSort) {
+  Student a = {1, "Петренко", 1, CS, 0, 0, {.programming = 80}};
+  Student b = {2, "Андрусенко", 1, CS, 0, 0, {.programming = 80}};
+  EXPECT_TRUE(compareStudents(a, b));
+}
+
+TEST(CompareIndexTest, ProfileSorting) {
+  Index a = {0, 1, 70, "AAA"};
+  Index b = {1, 1, 90, "BBB"};
+
+  EXPECT_TRUE(compareIndex(a, b));
+}
+
+TEST(CompareIndexTest, CourseSorting) {
+  Index a = {0, 1, 80, "AAA"};
+  Index b = {1, 2, 80, "BBB"};
+
+  EXPECT_TRUE(compareIndex(a, b));
+}
+
+TEST(CompareIndexTest, SurnameSorting) {
+  Index a = {0, 1, 90, "Андрій"};
+  Index b = {1, 1, 90, "Петро"};
+
+  EXPECT_TRUE(compareIndex(a, b)); // А < П
+}
+
+TEST(BinarySearchTest, Found) {
+  Index arr[3] = {{0, 1, 70, "AAA"}, {1, 2, 80, "BBB"}, {2, 3, 90, "CCC"}};
+
+  EXPECT_TRUE(binarySearch(arr, 3, "BBB", 2, 80));
+}
+
+TEST(BinarySearchTest, NotFoundSurname) {
+  Index arr[3] = {{0, 1, 70, "AAA"}, {1, 2, 80, "BBB"}, {2, 3, 90, "CCC"}};
+
+  EXPECT_FALSE(binarySearch(arr, 3, "DDD", 1, 50));
+}
+
+TEST(BinarySearchTest, NotFoundCourseMismatch) {
+  Index arr[3] = {{0, 1, 70, "AAA"}, {1, 2, 80, "BBB"}, {2, 3, 90, "CCC"}};
+
+  EXPECT_FALSE(binarySearch(arr, 3, "BBB", 3, 80));
+}
+
+TEST(BinarySearchTest, NotFoundProfileMismatch) {
+  Index arr[3] = {{0, 1, 70, "AAA"}, {1, 2, 80, "BBB"}, {2, 3, 90, "CCC"}};
+
+  EXPECT_FALSE(binarySearch(arr, 3, "BBB", 2, 81));
+}
+
+TEST(PrintTableTest, CallDoesNotCrash) {
+  Student arr[2] = {
+      {1, "AAA", 1, CS, 80, 90, {.programming = 85}},
+      {2, "BBB", 2, IT, 75, 88, {.numerical = 70}},
+  };
+
+  EXPECT_NO_THROW(printTable(arr, 2));
+}
+admin@MacBook-Air-admin-2 tems % 
